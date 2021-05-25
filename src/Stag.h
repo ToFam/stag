@@ -8,7 +8,9 @@
 #include "Decoder.h"
 #include "PoseRefiner.h"
 
-class Stag
+#include "libstag_export.h"
+
+class LIBSTAG_EXPORT Stag
 {
 	// if keepLogs is true, keep the intermediate results of the detection algorithm in the memory, to be dumped when asked (default: false)
 	bool keepLogs = false;

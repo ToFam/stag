@@ -1,5 +1,8 @@
+cmake_minimum_required(VERSION 3.11)
 
 project(Stag)
+
+include(GenerateExportHeader)
 
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE Release)
@@ -21,25 +24,41 @@ find_package(OpenCV 4.5.2 REQUIRED COMPONENTS ximgproc)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
-file(GLOB HEADER_FILE1 "src/*.h")
+file(GLOB HEADER_FILES "src/*.h")
 file(GLOB SRC_FILE1 "src/*.c*")
 #file(GLOB SRC_FILE2 "src/ED/*.c*")
 
+
 include_directories(
     ${OpenCV_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_BINARY_DIR}
     src/
     #src/ED/
 )
+
 add_library(
     LibStag SHARED
-    ${HEADER_FILE1}
+    ${HEADER_FILES}
     ${SRC_FILE1}
     #${SRC_FILE2}
 )
+
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+generate_export_header(LibStag)
+
 target_link_libraries(
     LibStag
     ${OpenCV_LIBS}
 )
+
+install(TARGETS LibStag DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install(FILES
+ ${HEADER_FILES}
+ ${PROJECT_BINARY_DIR}/LibStag_export.h
+ DESTINATION ${CMAKE_INSTALL_PREFIX}/include/libstag
+)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/app)
 
 add_executable(
