@@ -3,7 +3,9 @@
 
 #include "Quad.h"
 
-class Marker : public Quad 
+#include "libstag_export.h"
+
+class LIBSTAG_EXPORT Marker : public Quad
 {
 public:
 	int id;

@@ -45,6 +45,12 @@ void Stag::detectMarkers(Mat inImage)
 }
 
 
+vector<Marker> Stag::getMarkers() const
+{
+    return markers;
+}
+
+
 void Stag::logResults(string path)
 {
 	drawer.drawEdgeMap(path + "1 edges.png", image, edInterface.getEdgeMap());
