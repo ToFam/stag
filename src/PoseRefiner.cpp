@@ -136,8 +136,8 @@ void PoseRefiner::refineMarkerPose(EDInterface* edInterface, Marker& marker)
 
 	// refine the pose
 	optEllipse = marker.C;
-	cv::Ptr<cv::DownhillSolver> solver = cv::DownhillSolver::create();
-	cv::Ptr<cv::MinProblemSolver::Function> ptr_F = cv::makePtr<Refine>();
+    cv::Ptr<cv::DownhillSolver> solver = cv::DownhillSolver::create();
+    cv::Ptr<cv::MinProblemSolver::Function> ptr_F = cv::makePtr<Refine>().staticCast<cv::MinProblemSolver::Function>();
 	solver->setFunction(ptr_F);
 	cv::Mat x(1, 9, CV_64FC1);
 	for (int i = 0; i < 3; i++)
