@@ -2,6 +2,7 @@
 #define QUADDETECTOR_H
 
 #include <vector>
+#include "EDTypes.h"
 #include "EDInterface.h"
 #include "Quad.h"
 

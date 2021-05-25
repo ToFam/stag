@@ -3,11 +3,28 @@
 #include "EDInterface.h"
 #include "utility.h"
 
+#include "EDLineDetect.h"
+
+#include <opencv2/ximgproc/edge_drawing.hpp>
+
 using std::vector;
 using std::max;
 using std::min;
 using cv::Point2i;
 using cv::Point2d;
+
+using cv::Mat;
+using cv::Vec4f;
+using cv::Ptr;
+using cv::ximgproc::EdgeDrawing;
+
+EDInterface::~EDInterface()
+{
+    if (edLines != NULL)
+        delete edLines;
+    if (edgeMap != NULL)
+        delete edgeMap;
+}
 
 
 void EDInterface::runEDPFandEDLines(const cv::Mat &image)
@@ -15,9 +32,52 @@ void EDInterface::runEDPFandEDLines(const cv::Mat &image)
 	if (edLines != NULL)
 		delete edLines;
 	if (edgeMap != NULL)
-		delete edgeMap;
+        delete edgeMap;
 
-	edLines = DetectLinesByEDPF(edgeMap, image.data, image.size().width, image.size().height, false, 0);
+    Ptr<EdgeDrawing> ed = cv::ximgproc::createEdgeDrawing();
+    ed->params.PFmode = true;
+    ed->params.EdgeDetectionOperator = EdgeDrawing::PREWITT;
+    ed->params.GradientThresholdValue = 16;
+    ed->params.AnchorThresholdValue = 0;
+
+    ed->detectEdges(image);
+    vector<vector<cv::Point>> segments = ed->getSegments();
+
+    edgeMap = new EdgeMap(image.size().width, image.size().height);
+
+    edgeMap->noSegments = segments.size();
+    size_t pixelOffset = 0;
+    for (size_t i = 0; i < segments.size(); ++i)
+    {
+        edgeMap->segments[i].pixels = &edgeMap->pixels[pixelOffset];
+        edgeMap->segments[i].noPixels = segments[i].size();
+        for (size_t j = 0; j < segments[i].size(); ++j)
+        {
+            edgeMap->pixels[pixelOffset + j].r = segments[i][j].y;
+            edgeMap->pixels[pixelOffset + j].c = segments[i][j].x;
+        }
+        pixelOffset += segments[i].size();
+    }
+
+    /*
+     * opencv impl does not return edge segments corresponding to lines
+     *  so line detection has to be done with the old code for the moment
+     *
+    vector<Vec4f> lines;
+    ed->detectLines(lines);
+
+    edLines = new EDLines(image.size().width, image.size().height);
+
+    for (size_t l = 0; l < lines.size(); ++l)
+    {
+        edLines->add(0.0, 0.0, 0, lines[l][0], lines[l][1], lines[l][2], lines[l][3]);
+        UpdateLineParameters(&edLines->lines[l]);
+    }
+    */
+
+    edLines = detectLines(image.data, edgeMap, image.size().width, image.size().height);
+
+    //edLines = DetectLinesByEDPF(edgeMap, image.data, image.size().width, image.size().height, false, 0);
 }
 
 

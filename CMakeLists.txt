@@ -17,21 +17,24 @@ CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-find_package(OpenCV REQUIRED)
+find_package(OpenCV 4.5.2 REQUIRED COMPONENTS ximgproc)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+
+file(GLOB HEADER_FILE1 "src/*.h")
 file(GLOB SRC_FILE1 "src/*.c*")
-file(GLOB SRC_FILE2 "src/ED/*.c*")
+#file(GLOB SRC_FILE2 "src/ED/*.c*")
 
 include_directories(
     ${OpenCV_INCLUDE_DIRS}
     src/
-    src/ED/
+    #src/ED/
 )
 add_library(
     LibStag SHARED
+    ${HEADER_FILE1}
     ${SRC_FILE1}
-    ${SRC_FILE2}
+    #${SRC_FILE2}
 )
 target_link_libraries(
     LibStag

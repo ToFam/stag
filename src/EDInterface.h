@@ -3,8 +3,7 @@
 
 #include "opencv2/opencv.hpp"
 
-#include "ED/EDLines.h"
-#include "ED/EdgeMap.h"
+#include "EDTypes.h"
 
 class EDInterface
 {
@@ -12,6 +11,8 @@ class EDInterface
 	EDLines* edLines = NULL;
 
 public:
+    ~EDInterface();
+
 	// runs EDPF and EDLines, keeps the results in memory
 	void runEDPFandEDLines(const cv::Mat &image);
 

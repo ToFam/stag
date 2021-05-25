@@ -1,10 +1,28 @@
 #include "Stag.h"
 #include "opencv2/opencv.hpp"
+#include <opencv2/ximgproc.hpp>
 
-int main() {
-  cv::Mat image = cv::imread("1.png", CV_LOAD_IMAGE_GRAYSCALE);
+using namespace cv;
+using namespace cv::ximgproc;
+using namespace std;
 
-  Stag stag(15, 7, true);
+int main(int argc, char** argv) {
+
+    char* img = "00000.png";
+    if (argc > 1)
+    {
+        img = argv[1];
+    }
+
+  cv::Mat image = cv::imread(img, cv::IMREAD_GRAYSCALE);
+  if (image.empty())
+  {
+      cout << "empty" << endl;
+      return 1;
+  }
+
+
+  Stag stag(23, 7, true);
 
   stag.detectMarkers(image);
   stag.logResults("");
