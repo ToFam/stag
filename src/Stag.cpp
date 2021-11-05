@@ -50,6 +50,11 @@ vector<Marker> Stag::getMarkers() const
     return markers;
 }
 
+void Stag::clearMarkers()
+{
+    markers.clear();
+    falseCandidates.clear();
+}
 
 void Stag::logResults(string path)
 {

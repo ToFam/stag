@@ -68,9 +68,9 @@ public:
 
   /// Destructor
   ~EDLines(){
-    delete lines;
-    delete x;
-    delete y;
+    delete[] lines;
+    delete[] x;
+    delete[] y;
   } //end-EDLines
 
   /// clear
@@ -80,7 +80,7 @@ public:
     capacity *= 2;
     LineSegment *newArr = new LineSegment[capacity];
     memcpy(newArr, lines, sizeof(LineSegment)*noLines);
-    delete lines;
+    delete[] lines;
     lines = newArr;
   } //end-expandCapacity
 
@@ -140,9 +140,9 @@ public:
 
   // Destructor
   ~EdgeMap(){
-    delete edgeImg;
-    delete pixels;
-    delete segments;
+    delete[] edgeImg;
+    delete[] pixels;
+    delete[] segments;
   } //end-~EdgeMap
 
 

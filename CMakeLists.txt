@@ -55,7 +55,7 @@ target_link_libraries(
 install(TARGETS LibStag DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 install(FILES
  ${HEADER_FILES}
- ${PROJECT_BINARY_DIR}/LibStag_export.h
+ ${PROJECT_BINARY_DIR}/libstag_export.h
  DESTINATION ${CMAKE_INSTALL_PREFIX}/include/libstag
 )
 

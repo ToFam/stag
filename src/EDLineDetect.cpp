@@ -153,7 +153,7 @@ public:
 
   // Destructor
   ~NFALUT(){
-    delete LUT;
+    delete[] LUT;
   } //end-~NFALUT
 };
 
@@ -1304,8 +1304,8 @@ void ValidateLineSegments(EdgeMap *map, unsigned char *srcImg, EDLines *lines, E
 
   delete LUT;
 
-  delete x;
-  delete y;
+  delete[] x;
+  delete[] y;
 
 } // end-ValidateLineSegments
 

@@ -37,6 +37,7 @@ class LIBSTAG_EXPORT Stag
 public:
 	Stag(int libraryHD = 15, int errorCorrection = 7, bool inKeepLogs = false);
 	void detectMarkers(cv::Mat inImage);
+    void clearMarkers();
 	void logResults(string path = "");
     vector<Marker> getMarkers() const;
 };
