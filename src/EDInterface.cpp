@@ -59,25 +59,18 @@ void EDInterface::runEDPFandEDLines(const cv::Mat &image)
         pixelOffset += segments[i].size();
     }
 
-    /*
-     * opencv impl does not return edge segments corresponding to lines
-     *  so line detection has to be done with the old code for the moment
-     *
     vector<Vec4f> lines;
     ed->detectLines(lines);
 
     edLines = new EDLines(image.size().width, image.size().height);
 
+    vector<int> lineSegmentIndices = ed->getSegmentIndicesOfLines();
+
     for (size_t l = 0; l < lines.size(); ++l)
     {
-        edLines->add(0.0, 0.0, 0, lines[l][0], lines[l][1], lines[l][2], lines[l][3]);
+        edLines->add(0.0, 0.0, 0, lines[l][0], lines[l][1], lines[l][2], lines[l][3], lineSegmentIndices[l]);
         UpdateLineParameters(&edLines->lines[l]);
     }
-    */
-
-    edLines = detectLines(image.data, edgeMap, image.size().width, image.size().height);
-
-    //edLines = DetectLinesByEDPF(edgeMap, image.data, image.size().width, image.size().height, false, 0);
 }
 
 
