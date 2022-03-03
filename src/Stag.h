@@ -14,6 +14,7 @@ class LIBSTAG_EXPORT Stag
 {
 	// if keepLogs is true, keep the intermediate results of the detection algorithm in the memory, to be dumped when asked (default: false)
 	bool keepLogs = false;
+    bool addDuplicates = false;
 	int errorCorrection;
 	EDInterface edInterface;
 	QuadDetector quadDetector;
@@ -40,6 +41,7 @@ public:
     void clearMarkers();
 	void logResults(string path = "");
     vector<Marker> getMarkers() const;
+    void setAddDuplicates(bool active);
 };
 
 

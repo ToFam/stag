@@ -2,6 +2,8 @@
 #include "Ellipse.h"
 #include "utility.h"
 
+#include <set>
+
 #define HALF_PI 1.570796326794897
 
 using cv::Mat;
@@ -24,17 +26,21 @@ void Stag::detectMarkers(Mat inImage)
 
 	vector<Quad> quads = quadDetector.getQuads();
 
+    std::set<int> detectedIDs;
 	for (int indQuad = 0; indQuad < quads.size(); indQuad++)
 	{
 		quads[indQuad].estimateHomography();
 		Codeword c = readCode(quads[indQuad]);
 		int shift;
-		int id;
+        int id;
 		if (decoder.decode(c, errorCorrection, id, shift))
-		{
-			Marker marker(quads[indQuad], id);
-			marker.shiftCorners2(shift);
-			markers.push_back(marker);
+        {
+            if (addDuplicates || detectedIDs.insert(id).second)
+            {
+                Marker marker(quads[indQuad], id);
+                marker.shiftCorners2(shift);
+                markers.push_back(marker);
+            }
 		}
 		else if (keepLogs)
 			falseCandidates.push_back(quads[indQuad]);
@@ -250,4 +256,9 @@ Mat Stag::createMatFromPolarCoords(double radius, double radians, double circleR
 	point.at<double>(1) = 0.5 - sin(radians) * radius * (circleRadius / 0.5);
 	point.at<double>(2) = 1;
 	return point;
+}
+
+void Stag::setAddDuplicates(bool active)
+{
+    addDuplicates = active;
 }

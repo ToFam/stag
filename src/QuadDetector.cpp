@@ -20,9 +20,7 @@ void QuadDetector::detectQuads(const cv::Mat &image, EDInterface* edInterface)
 	distortedQuads.clear();
 	quads.clear();
 
-	edInterface->runEDPFandEDLines(image);
-
-	EDLines* edLines = edInterface->getEDLines();
+    edInterface->runEDPFandEDLines(image);
 
 	vector<vector<int>> lineGroups = groupLines(image, edInterface);
 
